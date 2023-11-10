@@ -1,0 +1,9 @@
+rootProject.name = 'gym-for-developers'
+
+includeBuild 'gd-eureka-server'
+includeBuild 'gd-api-gateway'
+
+includeBuild 'gd-store-service'
+includeBuild 'gd-main-service'
+
+

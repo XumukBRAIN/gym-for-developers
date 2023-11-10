@@ -1,0 +1,23 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: gd-api-gateway # application id
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: test # Ручное перенаправление запроса: http://localhost:8082/gd-store-service/main/test <-> http://localhost:8082/main/test
+          uri: lb://gd-store-service
+          predicates:
+            - Path=/main/test
+            - Method=GET
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka # microservices registration

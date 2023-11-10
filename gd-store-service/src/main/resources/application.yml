@@ -1,0 +1,15 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: gd-store-service # application id
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka # microservices registration
+    fetch-registry: true
+    register-with-eureka: true
+
+
