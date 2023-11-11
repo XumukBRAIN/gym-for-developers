@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GdNoteDto {
-
     private String section;
 
     private String advice;

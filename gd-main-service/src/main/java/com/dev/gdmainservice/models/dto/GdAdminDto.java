@@ -17,5 +17,4 @@ public class GdAdminDto {
     private String phoneNumber;
 
     private String email;
-
 }

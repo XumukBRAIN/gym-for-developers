@@ -17,36 +17,35 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class GdCommentService {
-    private final GdCommentRepository gdCommentRepository;
-    private final GdNoteRepository gdNoteRepository;
+    private final GdCommentRepository commentRepository;
+    private final GdNoteRepository noteRepository;
 
     @Autowired
-    public GdCommentService(GdCommentRepository gdCommentRepository, GdNoteRepository gdNoteRepository) {
-        this.gdCommentRepository = gdCommentRepository;
-        this.gdNoteRepository = gdNoteRepository;
+    public GdCommentService(GdCommentRepository commentRepository, GdNoteRepository noteRepository) {
+        this.commentRepository = commentRepository;
+        this.noteRepository = noteRepository;
     }
 
     /**
      * Метод для создания комментария
      *
-     * @param noteId    Идентификатор заметки
-     * @param gdComment комментарий
+     * @param noteId  Идентификатор заметки
+     * @param comment комментарий
      */
-    //todo поле author будет браться из токена
     @Transactional
-    public GdComment create(Integer noteId, GdComment gdComment) {
-        if (gdComment == null) {
+    public GdComment create(Integer noteId, GdComment comment) {
+        if (comment == null) {
             throw new GdRuntimeException("В качестве комментария был передан null", ExceptionConst.ERRORS_CODE_RT);
         }
 
-        GdNote note = gdNoteRepository.findNoteById(noteId);
+        GdNote note = noteRepository.findNoteById(noteId);
         if (note == null) {
             throw new GdRuntimeException("В поле noteId был передан null", ExceptionConst.ERRORS_CODE_RT);
         }
 
-        gdComment.setNote(note);
-        gdCommentRepository.save(gdComment);
+        comment.setNote(note);
+        commentRepository.save(comment);
 
-        return gdComment;
+        return comment;
     }
 }

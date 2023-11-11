@@ -15,24 +15,24 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class GdNoteService {
-
-    private final GdNoteRepository gdNoteRepository;
+    private final GdNoteRepository noteRepository;
 
     @Autowired
-    public GdNoteService(GdNoteRepository gdNoteRepository) {
-        this.gdNoteRepository = gdNoteRepository;
+    public GdNoteService(GdNoteRepository noteRepository) {
+        this.noteRepository = noteRepository;
     }
 
     /**
      * Метод для создания заметки
      *
-     * @param gdNote Критерии заметки
+     * @param note Критерии заметки
      */
-    public void save(GdNote gdNote) {
-        if (gdNote == null) {
+    public void save(GdNote note) {
+        if (note == null) {
             throw new GdRuntimeException(ExceptionConst.MESSAGE_RT, ExceptionConst.ERRORS_CODE_RT);
         }
-        gdNoteRepository.save(gdNote);
+
+        noteRepository.save(note);
     }
 
     /**
@@ -41,7 +41,7 @@ public class GdNoteService {
      * @param id Идентификатор заметки
      */
     public GdNote findOne(int id) {
-        return gdNoteRepository.findById(id)
+        return noteRepository.findById(id)
                 .orElseThrow(() -> new GdNotFoundException(ExceptionConst.MESSAGE_NF, ExceptionConst.ERRORS_CODE_NF));
     }
 }

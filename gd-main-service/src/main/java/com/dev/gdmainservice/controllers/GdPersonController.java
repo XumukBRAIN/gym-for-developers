@@ -11,25 +11,22 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/people")
 public class GdPersonController {
-    private final GdPersonService gdPersonService;
-    private final GdPersonConverter gdPersonConverter;
+    private final GdPersonService personService;
 
     @Autowired
-    public GdPersonController(GdPersonService gdPersonService, GdPersonConverter gdPersonConverter) {
-        this.gdPersonService = gdPersonService;
-        this.gdPersonConverter = gdPersonConverter;
+    public GdPersonController(GdPersonService personService) {
+        this.personService = personService;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestBody GdPersonDto gdPersonDTO) {
-        gdPersonService.save(gdPersonConverter.convertToEntity(gdPersonDTO));
+    public ResponseEntity<String> create(@RequestBody GdPersonDto personDto) {
+        personService.save(GdPersonConverter.convertToEntity(personDto));
 
         return ResponseEntity.ok("Пользователь успешно создан");
     }
 
     @GetMapping("/{id}")
     public GdPerson getPerson(@PathVariable("id") Long id) {
-        return gdPersonService.findOne(id);
+        return personService.findOne(id);
     }
-
 }

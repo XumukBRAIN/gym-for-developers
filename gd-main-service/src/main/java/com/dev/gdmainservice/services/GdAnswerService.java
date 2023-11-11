@@ -20,38 +20,37 @@ import java.util.List;
 
 @Service
 public class GdAnswerService {
-    private final GdAnswerRepository gdAnswerRepository;
-    private final GdQuestionRepository gdQuestionRepository;
+    private final GdAnswerRepository answerRepository;
+    private final GdQuestionRepository questionRepository;
 
     @Autowired
-    public GdAnswerService(GdAnswerRepository gdAnswerRepository, GdQuestionRepository gdQuestionRepository) {
-        this.gdAnswerRepository = gdAnswerRepository;
-        this.gdQuestionRepository = gdQuestionRepository;
+    public GdAnswerService(GdAnswerRepository answerRepository, GdQuestionRepository questionRepository) {
+        this.answerRepository = answerRepository;
+        this.questionRepository = questionRepository;
     }
 
     /**
      * Метод для создания ответа
      *
-     * @param gdanswer Данные ответа
+     * @param answer Данные ответа
      */
-    public void save(Long questionId, GdAnswer gdanswer) {
-
-        if (gdanswer == null) {
+    public void save(Long questionId, GdAnswer answer) {
+        if (answer == null) {
             throw new GdRuntimeException(ExceptionConst.MESSAGE_RT, ExceptionConst.ERRORS_CODE_RT);
         }
 
-        GdQuestion question = gdQuestionRepository.findById(questionId);
+        GdQuestion question = questionRepository.findById(questionId);
         if (question == null) {
             throw new GdRuntimeException(ExceptionConst.MESSAGE_NF, ExceptionConst.ERRORS_CODE_NF);
         }
 
         List<GdAnswer> answerList = question.getAnswer();
 
-        answerList.add(gdanswer);
-        gdanswer.setQuestion(question);
+        answerList.add(answer);
+        answer.setQuestion(question);
 
-        gdQuestionRepository.save(question);
-        gdAnswerRepository.save(gdanswer);
+        questionRepository.save(question);
+        answerRepository.save(answer);
     }
 
     /**
@@ -66,9 +65,8 @@ public class GdAnswerService {
             currentLikes = 0L;
         }
         Long finalCurrentLikes = currentLikes;
+
         return AppStartedListener.mapLikes.compute(id, (a, b) -> Math.addExact(finalCurrentLikes, 1));
     }
-
-
 }
 

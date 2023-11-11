@@ -11,24 +11,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/admin")
 public class GdAdminController {
-    private final GdAdminService gdAdminService;
-    private final GdAdminConverter gdAdminConverter;
+    private final GdAdminService adminService;
 
     @Autowired
-    public GdAdminController(GdAdminService gdAdminService, GdAdminConverter gdAdminConverter) {
-        this.gdAdminService = gdAdminService;
-        this.gdAdminConverter = gdAdminConverter;
+    public GdAdminController(GdAdminService adminService) {
+        this.adminService = adminService;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestBody GdAdminDto gdadminDTO) {
-        gdAdminService.save(gdAdminConverter.convertToEntity(gdadminDTO));
+    public ResponseEntity<String> create(@RequestBody GdAdminDto adminDto) {
+        adminService.save(GdAdminConverter.convertToEntity(adminDto));
         return ResponseEntity.ok("Админ успешно создан");
     }
 
     @GetMapping("/{name}")
     public GdAdmin getAdmin(@PathVariable("name") String name) {
-        return gdAdminService.findByName(name);
+        return adminService.findByName(name);
     }
-
 }

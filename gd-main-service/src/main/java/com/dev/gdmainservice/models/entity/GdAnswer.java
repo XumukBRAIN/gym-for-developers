@@ -26,7 +26,4 @@ public class GdAnswer {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "question_id", referencedColumnName = "id")
     private GdQuestion question;
-
-
-
 }

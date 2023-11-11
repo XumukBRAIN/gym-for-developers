@@ -14,18 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/comment")
 public class GdCommentController {
 
-    private final GdCommentService gdCommentService;
-    private final GdCommentConverter gdCommentConverter;
+    private final GdCommentService commentService;
 
     @Autowired
-    public GdCommentController(GdCommentService gdCommentService, GdCommentConverter gdCommentConverter) {
-        this.gdCommentService = gdCommentService;
-        this.gdCommentConverter = gdCommentConverter;
+    public GdCommentController(GdCommentService commentService) {
+        this.commentService = commentService;
     }
 
     @PostMapping("/create")
-    public GdComment create(@RequestBody GdCommentDto gdCommentDTO) {
-        return gdCommentService.create(gdCommentDTO.getNoteId(), gdCommentConverter.convertToEntity(gdCommentDTO));
+    public GdComment create(@RequestBody GdCommentDto commentDto) {
+        return commentService.create(commentDto.getNoteId(), GdCommentConverter.convertToEntity(commentDto));
     }
-
 }

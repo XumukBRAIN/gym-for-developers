@@ -15,23 +15,24 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class GdPersonService {
-    private final GdPersonRepository gdPersonRepository;
+    private final GdPersonRepository personRepository;
 
     @Autowired
-    public GdPersonService(GdPersonRepository gdPersonRepository) {
-        this.gdPersonRepository = gdPersonRepository;
+    public GdPersonService(GdPersonRepository personRepository) {
+        this.personRepository = personRepository;
     }
 
     /**
      * Метод для создания пользователя
      *
-     * @param gdPerson Данные пользователя
+     * @param person Данные пользователя
      */
-    public void save(GdPerson gdPerson) {
-        if (gdPerson == null) {
+    public void save(GdPerson person) {
+        if (person == null) {
             throw new GdRuntimeException(ExceptionConst.MESSAGE_RT, ExceptionConst.ERRORS_CODE_RT);
         }
-        gdPersonRepository.save(gdPerson);
+
+        personRepository.save(person);
     }
 
     /**
@@ -40,8 +41,7 @@ public class GdPersonService {
      * @param id Идентификатор пользователя
      */
     public GdPerson findOne(Long id) {
-        return gdPersonRepository.findById(id)
+        return personRepository.findById(id)
                 .orElseThrow(() -> new GdNotFoundException(ExceptionConst.MESSAGE_NF, ExceptionConst.ERRORS_CODE_NF));
     }
-
 }

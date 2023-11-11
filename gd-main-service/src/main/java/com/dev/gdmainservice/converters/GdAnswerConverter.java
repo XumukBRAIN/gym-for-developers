@@ -14,25 +14,24 @@ public class GdAnswerConverter {
     /**
      * Из DTO в Entity
      */
-    public GdAnswer convertToEntity(GdAnswerDto gdAnswerDTO) {
+    public static GdAnswer convertToEntity(GdAnswerDto answerDto) {
         return GdAnswer.builder()
-                .response(gdAnswerDTO.getResponse())
-                .question(gdAnswerDTO.getQuestion())
-                .whoAnswered(gdAnswerDTO.getWhoAnswered())
-                .likes(gdAnswerDTO.getLikes())
+                .response(answerDto.getResponse())
+                .question(answerDto.getQuestion())
+                .whoAnswered(answerDto.getWhoAnswered())
+                .likes(answerDto.getLikes())
                 .build();
     }
 
     /**
      * из Entity в DTO
      */
-    public GdAnswerDto convertToDto(GdAnswer gdAnswer) {
+    public static GdAnswerDto convertToDto(GdAnswer answer) {
         return GdAnswerDto.builder()
-                .response(gdAnswer.getResponse())
-                .question(gdAnswer.getQuestion())
-                .whoAnswered(gdAnswer.getWhoAnswered())
-                .likes(gdAnswer.getLikes())
+                .response(answer.getResponse())
+                .question(answer.getQuestion())
+                .whoAnswered(answer.getWhoAnswered())
+                .likes(answer.getLikes())
                 .build();
     }
-
 }

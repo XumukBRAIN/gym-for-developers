@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface GdQuestionRepository extends JpaRepository<GdQuestion, Integer> {
 
     GdQuestion findById(Long questionId);
-
 }

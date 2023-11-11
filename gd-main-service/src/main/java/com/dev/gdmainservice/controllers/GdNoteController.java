@@ -12,24 +12,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/note")
 public class GdNoteController {
 
-    private final GdNoteService gdNoteService;
-    private final GdNoteConverter gdConverterNote;
+    private final GdNoteService noteService;
 
     @Autowired
-    public GdNoteController(GdNoteService gdNoteService, GdNoteConverter gdConverterNote) {
-        this.gdNoteService = gdNoteService;
-        this.gdConverterNote = gdConverterNote;
+    public GdNoteController(GdNoteService noteService) {
+        this.noteService = noteService;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestBody GdNoteDto gdNoteDTO) {
-        gdNoteService.save(gdConverterNote.convertToEntity(gdNoteDTO));
+    public ResponseEntity<String> create(@RequestBody GdNoteDto noteDto) {
+        noteService.save(GdNoteConverter.convertToEntity(noteDto));
         return ResponseEntity.ok("Заметка успешно создана");
     }
 
     @GetMapping("/{id}")
     public GdNote getNote(@PathVariable("id") int id) {
-        return gdNoteService.findOne(id);
+        return noteService.findOne(id);
     }
-
 }

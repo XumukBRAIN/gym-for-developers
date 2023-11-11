@@ -24,12 +24,13 @@ public class GdQuestionService {
     /**
      * Метод для создания вопроса
      *
-     * @param gdQuestion Данные вопроса
+     * @param question Данные вопроса
      */
-    public void save(GdQuestion gdQuestion) {
-        if (gdQuestion == null) {
+    public void save(GdQuestion question) {
+        if (question == null) {
             throw new GdRuntimeException(ExceptionConst.MESSAGE_RT, ExceptionConst.ERRORS_CODE_RT);
         }
-        questionRepository.save(gdQuestion);
+
+        questionRepository.save(question);
     }
 }

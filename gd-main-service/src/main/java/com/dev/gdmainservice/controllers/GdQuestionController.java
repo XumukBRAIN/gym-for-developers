@@ -14,18 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/question")
 public class GdQuestionController {
     private final GdQuestionService gdQuestionService;
-    private final GdQuestionConverter gdQuestionConverter;
 
     @Autowired
-    public GdQuestionController(GdQuestionService gdQuestionService, GdQuestionConverter gdQuestionConverter) {
+    public GdQuestionController(GdQuestionService gdQuestionService) {
         this.gdQuestionService = gdQuestionService;
-        this.gdQuestionConverter = gdQuestionConverter;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestBody GdQuestionDto gdQuestionDTO) {
-        gdQuestionService.save(gdQuestionConverter.convertToEntity(gdQuestionDTO));
+    public ResponseEntity<String> create(@RequestBody GdQuestionDto questionDto) {
+        gdQuestionService.save(GdQuestionConverter.convertToEntity(questionDto));
         return ResponseEntity.ok("Вопрос успешно создан");
     }
-
 }

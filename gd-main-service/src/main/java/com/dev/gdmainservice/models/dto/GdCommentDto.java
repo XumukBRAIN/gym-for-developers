@@ -18,5 +18,4 @@ public class GdCommentDto {
     private LocalDateTime dateOfCreation;
 
     private String text;
-
 }

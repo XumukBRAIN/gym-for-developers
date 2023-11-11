@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface GdAnswerRepository extends JpaRepository<GdAnswer, Long> {
+
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(nativeQuery = true, value = "UPDATE answer SET likes = :likes WHERE id = :id")

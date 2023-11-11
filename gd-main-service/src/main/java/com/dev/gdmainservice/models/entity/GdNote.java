@@ -31,7 +31,6 @@ public class GdNote {
     @JsonManagedReference
     private List<GdComment> comments;
 
-
     public GdNote(BuilderGdNote builderGdNote) {
         this.id = builderGdNote.id;
         this.section = builderGdNote.section;
@@ -44,7 +43,6 @@ public class GdNote {
     public static BuilderGdNote newBuilder() {
         return new BuilderGdNote();
     }
-
 
     public static class BuilderGdNote {
         private Integer id;
@@ -86,7 +84,5 @@ public class GdNote {
         public GdNote build() {
             return new GdNote(this);
         }
-
-
     }
 }

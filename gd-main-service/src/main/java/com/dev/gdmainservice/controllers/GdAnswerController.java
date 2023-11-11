@@ -10,25 +10,22 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/answer")
 public class GdAnswerController {
-    private final GdAnswerService gdAnswerService;
-    private final GdAnswerConverter gdConvertAnswer;
+    private final GdAnswerService answerService;
 
     @Autowired
-    public GdAnswerController(GdAnswerService gdAnswerService, GdAnswerConverter gdConvertAnswer) {
-        this.gdAnswerService = gdAnswerService;
-        this.gdConvertAnswer = gdConvertAnswer;
+    public GdAnswerController(GdAnswerService answerService) {
+        this.answerService = answerService;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestBody GdAnswerDto gdAnswerDTO) {
-        gdAnswerService.save(gdAnswerDTO.getQuestionId(), gdConvertAnswer.convertToEntity(gdAnswerDTO));
+    public ResponseEntity<String> create(@RequestBody GdAnswerDto answerDto) {
+        answerService.save(answerDto.getQuestionId(), GdAnswerConverter.convertToEntity(answerDto));
         return ResponseEntity.ok("Ваш ответ успешно добавлен");
     }
 
     @PostMapping("/like/{id}")
     public ResponseEntity<Long> like(@PathVariable("id") Long id) {
-        Long actualLikes = gdAnswerService.like(id);
+        Long actualLikes = answerService.like(id);
         return ResponseEntity.ok(actualLikes);
     }
-
 }

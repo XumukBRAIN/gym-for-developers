@@ -17,6 +17,7 @@ import java.util.Map;
 @Slf4j
 public class AppStartedListener implements ApplicationListener<ApplicationStartedEvent> {
     public static Map<Long, Long> mapLikes = new HashMap<>();
+
     private final GdAnswerRepository gdAnswerRepository;
 
     @Autowired
@@ -27,7 +28,6 @@ public class AppStartedListener implements ApplicationListener<ApplicationStarte
 
     @Override
     public void onApplicationEvent(@Nullable ApplicationStartedEvent event) {
-
         try {
             List<Long[]> list = gdAnswerRepository.loadLikes();
             for (Long[] x : list) {

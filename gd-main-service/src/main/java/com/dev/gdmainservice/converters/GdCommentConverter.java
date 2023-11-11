@@ -16,11 +16,11 @@ public class GdCommentConverter {
     /**
      * Из DTO в Entity
      */
-    public GdComment convertToEntity(GdCommentDto gdCommentDTO) {
+    public static GdComment convertToEntity(GdCommentDto commentDto) {
         return GdComment.builder()
-                .author(gdCommentDTO.getAuthor())
-                .note(gdCommentDTO.getNote())
-                .text(gdCommentDTO.getText())
+                .author(commentDto.getAuthor())
+                .note(commentDto.getNote())
+                .text(commentDto.getText())
                 .dateOfCreation(LocalDateTime.now())
                 .build();
     }
@@ -28,11 +28,11 @@ public class GdCommentConverter {
     /**
      * из Entity в DTO
      */
-    public GdCommentDto convertToDTO(GdComment gdComment) {
+    public static GdCommentDto convertToDTO(GdComment comment) {
         return GdCommentDto.builder()
-                .author(gdComment.getAuthor())
-                .text(gdComment.getText())
-                .dateOfCreation(gdComment.getDateOfCreation())
+                .author(comment.getAuthor())
+                .text(comment.getText())
+                .dateOfCreation(comment.getDateOfCreation())
                 .build();
     }
 }

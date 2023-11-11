@@ -32,6 +32,4 @@ public class GdAdmin {
     private String phoneNumber;
 
     private String email;
-
-
 }

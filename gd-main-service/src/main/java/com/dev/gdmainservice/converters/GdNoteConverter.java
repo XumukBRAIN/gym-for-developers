@@ -16,11 +16,11 @@ public class GdNoteConverter {
     /**
      * Из DTO в Entity
      */
-    public GdNote convertToEntity(GdNoteDto gdNoteDTO) {
+    public static GdNote convertToEntity(GdNoteDto noteDto) {
         return GdNote.newBuilder()
-                .advice(gdNoteDTO.getAdvice())
-                .whoCreated(gdNoteDTO.getWhoCreated())
-                .section(gdNoteDTO.getSection())
+                .advice(noteDto.getAdvice())
+                .whoCreated(noteDto.getWhoCreated())
+                .section(noteDto.getSection())
                 .dateOfCreation(LocalDate.now())
                 .build();
     }
@@ -28,13 +28,12 @@ public class GdNoteConverter {
     /**
      * из Entity в DTO
      */
-    public GdNoteDto convertToDTO(GdNote gdNote) {
+    public static GdNoteDto convertToDTO(GdNote note) {
         return GdNoteDto.newBuilderDTO()
                 .dataOfCreation(LocalDate.now())
-                .advice(gdNote.getAdvice())
-                .section(gdNote.getSection())
-                .whoCreated(gdNote.getWhoCreated())
+                .advice(note.getAdvice())
+                .section(note.getSection())
+                .whoCreated(note.getWhoCreated())
                 .build();
     }
-
 }
