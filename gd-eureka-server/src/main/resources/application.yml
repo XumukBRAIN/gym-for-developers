@@ -11,4 +11,5 @@ eureka:
     fetch-registry: false
     service-url:
       default-zone: http://localhost:8081/eureka # microservices registration
+  renewalPercentThreshold: 0.85
 
