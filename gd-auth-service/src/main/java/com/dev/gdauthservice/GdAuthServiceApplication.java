@@ -1,13 +1,13 @@
-package com.dev.gdstoreservice;
+package com.dev.gdauthservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GdStoreServiceApplication {
+public class GdAuthServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GdStoreServiceApplication.class, args);
+        SpringApplication.run(GdAuthServiceApplication.class, args);
     }
 
 }

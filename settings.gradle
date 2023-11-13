@@ -6,4 +6,6 @@ includeBuild 'gd-api-gateway'
 includeBuild 'gd-store-service'
 includeBuild 'gd-main-service'
 
+includeBuild 'gd-auth-service'
+
 

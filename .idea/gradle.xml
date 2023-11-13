@@ -27,6 +27,11 @@
                   <project path="$PROJECT_DIR$/gd-main-service" />
                 </projects>
               </build>
+              <build path="$PROJECT_DIR$/gd-auth-service" name="gd-auth-service">
+                <projects>
+                  <project path="$PROJECT_DIR$/gd-auth-service" />
+                </projects>
+              </build>
             </builds>
           </compositeBuild>
         </compositeConfiguration>
@@ -35,9 +40,19 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/gd-api-gateway" />
+            <option value="$PROJECT_DIR$/gd-auth-service" />
             <option value="$PROJECT_DIR$/gd-eureka-server" />
             <option value="$PROJECT_DIR$/gd-main-service" />
             <option value="$PROJECT_DIR$/gd-store-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/gd-auth-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/gd-auth-service" />
           </set>
         </option>
       </GradleProjectSettings>
