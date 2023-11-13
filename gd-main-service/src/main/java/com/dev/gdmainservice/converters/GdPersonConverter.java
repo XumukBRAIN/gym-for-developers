@@ -21,6 +21,7 @@ public class GdPersonConverter {
                 .email(personDto.getEmail())
                 .birthDate(personDto.getBirthDate())
                 .name(personDto.getName())
+                .extraInfo(personDto.getExtraInfo())
                 .build();
     }
 
@@ -34,6 +35,16 @@ public class GdPersonConverter {
                 .birthDate(person.getBirthDate())
                 .email(person.getEmail())
                 .country(person.getCountry())
+                .extraInfo(person.getExtraInfo())
+                .build();
+    }
+
+    public static GdPerson.ExtraInfo convertToExtraInfoDTO(GdPerson.ExtraInfo extraInfo) {
+        return GdPerson.ExtraInfo.builder()
+                .github(extraInfo.getGithub())
+                .vk(extraInfo.getVk())
+                .instagram(extraInfo.getInstagram())
+                .telegram(extraInfo.getTelegram())
                 .build();
     }
 }

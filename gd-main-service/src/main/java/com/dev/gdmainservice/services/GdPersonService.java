@@ -44,4 +44,18 @@ public class GdPersonService {
         return personRepository.findById(id)
                 .orElseThrow(() -> new GdNotFoundException(ExceptionConst.MESSAGE_NF, ExceptionConst.ERRORS_CODE_NF));
     }
+
+    /**
+     * Метод для получения дополнительной информации о пользователе
+     *
+     * @param id Идентификатор пользователя
+     * @return Дополнительная информация
+     */
+    public GdPerson.ExtraInfo getExtraInfo(Long id) {
+        if (id == null) {
+            throw new GdRuntimeException("Не передан идентификатор пользователя", "personService.getExtraInfo.id.null");
+        }
+
+        return personRepository.getExtraInfoById(id);
+    }
 }
