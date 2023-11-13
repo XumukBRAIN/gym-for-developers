@@ -2,9 +2,9 @@ package com.dev.gdmainservice.services;
 
 import com.dev.gdmainservice.exceptions.ExceptionConst;
 import com.dev.gdmainservice.exceptions.GdRuntimeException;
-import com.dev.gdmainservice.models.entity.GdComment;
+import com.dev.gdmainservice.models.entity.GdNoteComment;
 import com.dev.gdmainservice.models.entity.GdNote;
-import com.dev.gdmainservice.repositories.GdCommentRepository;
+import com.dev.gdmainservice.repositories.GdNoteCommentRepository;
 import com.dev.gdmainservice.repositories.GdNoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,12 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Ildar
  */
 @Service
-public class GdCommentService {
-    private final GdCommentRepository commentRepository;
+public class GdNoteCommentService {
+    private final GdNoteCommentRepository commentRepository;
     private final GdNoteRepository noteRepository;
 
     @Autowired
-    public GdCommentService(GdCommentRepository commentRepository, GdNoteRepository noteRepository) {
+    public GdNoteCommentService(GdNoteCommentRepository commentRepository, GdNoteRepository noteRepository) {
         this.commentRepository = commentRepository;
         this.noteRepository = noteRepository;
     }
@@ -33,7 +33,7 @@ public class GdCommentService {
      * @param comment комментарий
      */
     @Transactional
-    public GdComment create(Integer noteId, GdComment comment) {
+    public GdNoteComment create(Integer noteId, GdNoteComment comment) {
         if (comment == null) {
             throw new GdRuntimeException("В качестве комментария был передан null", ExceptionConst.ERRORS_CODE_RT);
         }

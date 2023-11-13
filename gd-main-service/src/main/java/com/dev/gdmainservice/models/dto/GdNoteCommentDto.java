@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder(toBuilder = true)
-public class GdCommentDto {
+public class GdNoteCommentDto {
     private Integer noteId;
 
     private String author;

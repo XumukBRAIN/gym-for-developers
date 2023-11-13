@@ -1,7 +1,7 @@
 package com.dev.gdmainservice.converters;
 
-import com.dev.gdmainservice.models.dto.GdCommentDto;
-import com.dev.gdmainservice.models.entity.GdComment;
+import com.dev.gdmainservice.models.dto.GdNoteCommentDto;
+import com.dev.gdmainservice.models.entity.GdNoteComment;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,8 +16,8 @@ public class GdCommentConverter {
     /**
      * Из DTO в Entity
      */
-    public static GdComment convertToEntity(GdCommentDto commentDto) {
-        return GdComment.builder()
+    public static GdNoteComment convertToEntity(GdNoteCommentDto commentDto) {
+        return GdNoteComment.builder()
                 .author(commentDto.getAuthor())
                 .note(commentDto.getNote())
                 .text(commentDto.getText())
@@ -28,8 +28,8 @@ public class GdCommentConverter {
     /**
      * из Entity в DTO
      */
-    public static GdCommentDto convertToDTO(GdComment comment) {
-        return GdCommentDto.builder()
+    public static GdNoteCommentDto convertToDTO(GdNoteComment comment) {
+        return GdNoteCommentDto.builder()
                 .author(comment.getAuthor())
                 .text(comment.getText())
                 .dateOfCreation(comment.getDateOfCreation())

@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@Table(name = "comment")
-public class GdComment {
+@Table(name = "note_comment")
+public class GdNoteComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -31,7 +31,7 @@ public class GdNote {
 
     @OneToMany(mappedBy = "note", fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<GdComment> comments;
+    private List<GdNoteComment> comments;
 
     public GdNote(BuilderGdNote builderGdNote) {
         this.id = builderGdNote.id;
@@ -53,7 +53,7 @@ public class GdNote {
         private String advice;
         private LocalDate dateOfCreation;
         private String whoCreated;
-        private List<GdComment> comments;
+        private List<GdNoteComment> comments;
         private Integer status;
 
         public BuilderGdNote id(Integer id) {
@@ -80,7 +80,7 @@ public class GdNote {
             this.whoCreated = whoCreated;
             return this;
         }
-        public BuilderGdNote comments(List<GdComment> comments){
+        public BuilderGdNote comments(List<GdNoteComment> comments){
             this.comments = comments;
             return this;
         }
