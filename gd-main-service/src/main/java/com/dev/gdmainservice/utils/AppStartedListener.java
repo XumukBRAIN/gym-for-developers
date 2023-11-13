@@ -25,7 +25,6 @@ public class AppStartedListener implements ApplicationListener<ApplicationStarte
         this.gdAnswerRepository = gdAnswerRepository;
     }
 
-
     @Override
     public void onApplicationEvent(@Nullable ApplicationStartedEvent event) {
         try {

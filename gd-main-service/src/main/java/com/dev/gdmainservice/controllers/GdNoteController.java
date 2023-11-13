@@ -29,4 +29,10 @@ public class GdNoteController {
     public GdNote getNote(@PathVariable("id") int id) {
         return noteService.findOne(id);
     }
+
+    @PostMapping("/changeStatus/{id}/{status}")
+    public ResponseEntity<Integer> changeStatus(@PathVariable("id") Integer id, @PathVariable("status") Integer status) {
+        noteService.changeStatus(id, status);
+        return ResponseEntity.ok(status);
+    }
 }

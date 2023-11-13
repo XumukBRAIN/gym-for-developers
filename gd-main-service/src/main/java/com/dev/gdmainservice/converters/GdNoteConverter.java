@@ -22,6 +22,7 @@ public class GdNoteConverter {
                 .whoCreated(noteDto.getWhoCreated())
                 .section(noteDto.getSection())
                 .dateOfCreation(LocalDate.now())
+                .status(noteDto.getStatus())
                 .build();
     }
 
@@ -34,6 +35,7 @@ public class GdNoteConverter {
                 .advice(note.getAdvice())
                 .section(note.getSection())
                 .whoCreated(note.getWhoCreated())
+                .status(note.getStatus())
                 .build();
     }
 }
