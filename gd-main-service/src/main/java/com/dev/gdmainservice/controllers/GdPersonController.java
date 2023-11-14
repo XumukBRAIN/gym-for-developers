@@ -34,4 +34,10 @@ public class GdPersonController {
     public GdPerson.ExtraInfo getExtraInfo(@PathVariable("id") Long id) {
         return GdPersonConverter.convertToExtraInfoDTO(personService.getExtraInfo(id));
     }
+
+    @PostMapping("/extraInfo/create/{id}")
+    public ResponseEntity<String> saveExtraInfo(@PathVariable("id") Long id, @RequestBody GdPerson.ExtraInfo extraInfo) {
+        personService.saveExtraInfo(id, extraInfo);
+        return ResponseEntity.ok("Дополнительная информация создана/обновлена успешно!");
+    }
 }

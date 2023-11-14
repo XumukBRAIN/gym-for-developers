@@ -19,7 +19,7 @@ import java.time.LocalDate;
 public class GdPerson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String name;
 
