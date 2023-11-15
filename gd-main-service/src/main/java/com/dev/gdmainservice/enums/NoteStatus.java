@@ -16,5 +16,5 @@ public enum NoteStatus {
     RECOVERED(5, "Восстановлена");
 
     private final Integer code;
-    private final String description;
+    private final String title;
 }

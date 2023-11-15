@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GdNoteDto {
+public class GdNoteCommonDto {
     private String section;
 
     private String advice;
@@ -18,9 +18,9 @@ public class GdNoteDto {
 
     private LocalDate dateOfCreation;
 
-    private Integer status;
+    private String status;
 
-    public GdNoteDto(BuilderDTO builderDTO) {
+    public GdNoteCommonDto(BuilderDTO builderDTO) {
         this.section = builderDTO.section;
         this.advice = builderDTO.advice;
         this.whoCreated = builderDTO.whoCreated;
@@ -37,7 +37,7 @@ public class GdNoteDto {
         private String advice;
         private LocalDate dateOfCreation;
         private String whoCreated;
-        private Integer status;
+        private String status;
 
         public BuilderDTO section(String section) {
             this.section = section;
@@ -59,13 +59,13 @@ public class GdNoteDto {
             return this;
         }
 
-        public BuilderDTO status(Integer status) {
+        public BuilderDTO status(String status) {
             this.status = status;
             return this;
         }
 
-        public GdNoteDto build() {
-            return new GdNoteDto(this);
+        public GdNoteCommonDto build() {
+            return new GdNoteCommonDto(this);
         }
     }
 }

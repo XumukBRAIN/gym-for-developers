@@ -1,6 +1,6 @@
 package com.dev.gdmainservice.converters;
 
-import com.dev.gdmainservice.models.dto.GdNoteDto;
+import com.dev.gdmainservice.models.dto.GdNoteCommonDto;
 import com.dev.gdmainservice.models.entity.GdNote;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class GdNoteConverter {
     /**
      * Из DTO в Entity
      */
-    public static GdNote convertToEntity(GdNoteDto noteDto) {
+    public static GdNote convertToEntity(GdNoteCommonDto noteDto) {
         return GdNote.newBuilder()
                 .advice(noteDto.getAdvice())
                 .whoCreated(noteDto.getWhoCreated())
@@ -29,8 +29,8 @@ public class GdNoteConverter {
     /**
      * из Entity в DTO
      */
-    public static GdNoteDto convertToDTO(GdNote note) {
-        return GdNoteDto.newBuilderDTO()
+    public static GdNoteCommonDto convertToDTO(GdNote note) {
+        return GdNoteCommonDto.newBuilderDTO()
                 .dataOfCreation(LocalDate.now())
                 .advice(note.getAdvice())
                 .section(note.getSection())

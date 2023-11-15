@@ -1,13 +1,21 @@
 package com.dev.gdmainservice.services;
 
+import com.dev.gdmainservice.enums.NoteStatus;
 import com.dev.gdmainservice.exceptions.ExceptionConst;
 import com.dev.gdmainservice.exceptions.GdNotFoundException;
 import com.dev.gdmainservice.exceptions.GdRuntimeException;
 import com.dev.gdmainservice.models.entity.GdNote;
 import com.dev.gdmainservice.repositories.GdNoteRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Сервис для работы с заметками
@@ -24,6 +32,21 @@ public class GdNoteService {
         this.noteRepository = noteRepository;
     }
 
+    Map<String, Consumer<Integer>> CHANGE_STATUS_MAP = new HashMap<>() {{
+        put(NoteStatus.ACCEPTED.getTitle(), id -> accept(id));
+        put(NoteStatus.REJECTED.getTitle(), id -> reject(id));
+        put(NoteStatus.DELETED.getTitle(), id -> delete(id));
+        put(NoteStatus.RECOVERED.getTitle(), id -> recover(id));
+    }};
+
+    private void recover(Integer id) {
+        //TODO
+    }
+
+    private void delete(Integer id) {
+        //TODO
+    }
+
     /**
      * Метод для создания заметки
      *
@@ -34,6 +57,7 @@ public class GdNoteService {
             throw new GdRuntimeException(ExceptionConst.MESSAGE_RT, ExceptionConst.ERRORS_CODE_RT);
         }
 
+        note.setStatus(NoteStatus.IN_REVIEW.getTitle());
         noteRepository.save(note);
     }
 
@@ -48,23 +72,60 @@ public class GdNoteService {
     }
 
     /**
-     * @see GdNoteRepository#changeStatus(Integer, Integer)
+     * Метод для получения списка заметок в статусе 'Рассмотрение'
+     *
+     * @param status Статус
+     * @return Список заметок
      */
-    public void changeStatus(Integer id, Integer status) {
-        if (id == null) {
-            throw new GdRuntimeException("Не указан идентификатор заметки", "noteService.changeStatus.id.null");
-        }
-
-        if (status == null) {
-            throw new GdRuntimeException("Не указан новый статус заметки", "noteService.changeStatus.status.null");
+    public List<GdNote> getAllReviewingNotes(String status) {
+        if (StringUtils.isBlank(status)) {
+            log.warn("Был указан несуществующий статус");
+            return Collections.emptyList();
         }
 
         try {
-            noteRepository.changeStatus(id, status);
-            log.info("Статус заметки с идентификатором {} сменен успешно", id);
+            return noteRepository.findAllByStatusEquals(NoteStatus.IN_REVIEW.getTitle());
         } catch (Exception e) {
-            log.error("Ошибка при смене статуса заметки с идентификатором {}: {}", id, e.getMessage());
-            throw new GdRuntimeException("Ошибка при смене статуса заметки", "noteService.changeStatus.error");
+            log.error("Ошибка во время получения заметок в статусе {}: {}", NoteStatus.IN_REVIEW.getTitle(), e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Метод для смены статусы заметки
+     *
+     * @param id Идентификатор заметки
+     * @param status Новый статус
+     */
+    public void changeStatus(Integer id, String status) {
+        CHANGE_STATUS_MAP.get(status).accept(id);
+    }
+
+    /**
+     * Метод принятия заметки
+     *
+     * @param id Идентификатор заметки
+     */
+    private void accept(Integer id) {
+        try {
+            noteRepository.accept(id, NoteStatus.ACCEPTED.getTitle());
+        } catch (Exception e) {
+            log.error("Ошибка в ходе принятия заметки с идентификатором {}: {}", id, e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Метод отклонения заметки
+     *
+     * @param id Идентификатор заметки
+     */
+    private void reject(Integer id) {
+        try {
+            noteRepository.reject(id, NoteStatus.REJECTED.getTitle());
+        } catch (Exception e) {
+            log.error("Ошибка в ходе отклонения заметки с идентификатором {}: {}", id, e.getMessage());
+            throw e;
         }
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,8 +18,15 @@ public interface GdNoteRepository extends JpaRepository<GdNote, Integer> {
 
     GdNote findNoteById(Integer id);
 
-    @Modifying
-    @Query(value = "UPDATE note SET status = :status WHERE id = :id", nativeQuery = true)
+    List<GdNote> findAllByStatusEquals(String status);
+
     @Transactional
-    void changeStatus(@Param("id") Integer id, @Param("status") Integer status);
+    @Modifying(clearAutomatically = true)
+    @Query(nativeQuery = true, value = "update note set status = :status where id = :id")
+    void accept(@Param("id") Integer id, @Param("status") String status);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(nativeQuery = true, value = "update note set status = :status where id = :id")
+    void reject(@Param("id") Integer id, @Param("status") String status);
 }
