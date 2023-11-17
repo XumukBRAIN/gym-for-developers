@@ -1,6 +1,5 @@
 package com.dev.gdmainservice.services;
 
-import com.dev.gdmainservice.exceptions.ExceptionConst;
 import com.dev.gdmainservice.exceptions.GdRuntimeException;
 import com.dev.gdmainservice.models.entity.GdAnswer;
 import com.dev.gdmainservice.models.entity.GdQuestion;
@@ -11,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.dev.gdmainservice.exceptions.ExceptionConst.*;
 
 /**
  * Сервис для работы с ответами
@@ -36,12 +37,12 @@ public class GdAnswerService {
      */
     public void save(Long questionId, GdAnswer answer) {
         if (answer == null) {
-            throw new GdRuntimeException(ExceptionConst.MESSAGE_RT, ExceptionConst.ERRORS_CODE_RT);
+            throw new GdRuntimeException(NULL_PARAM_MSG, NULL_PARAM_CODE);
         }
 
         GdQuestion question = questionRepository.findById(questionId);
         if (question == null) {
-            throw new GdRuntimeException(ExceptionConst.MESSAGE_NF, ExceptionConst.ERRORS_CODE_NF);
+            throw new GdRuntimeException(NOT_FOUND_MSG, NOT_FOUND_CODE);
         }
 
         List<GdAnswer> answerList = question.getAnswer();

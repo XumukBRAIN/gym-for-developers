@@ -29,4 +29,16 @@ public interface GdNoteRepository extends JpaRepository<GdNote, Integer> {
     @Modifying(clearAutomatically = true)
     @Query(nativeQuery = true, value = "update note set status = :status where id = :id")
     void reject(@Param("id") Integer id, @Param("status") String status);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(nativeQuery = true, value = "INSERT INTO note_history SELECT section, advice, date_of_creation, who_created, :status FROM note WHERE id = :id; " +
+            "DELETE FROM note WHERE id = :id")
+    void delete(@Param("id") Integer id, @Param("status") String status);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(nativeQuery = true, value = "INSERT INTO note SELECT section, advice, date_of_creation, who_created, :status FROM note WHERE id = :id; " +
+            "DELETE FROM note_history WHERE id = :id")
+    void recover(@Param("id") Integer id, @Param("status") String status);
 }

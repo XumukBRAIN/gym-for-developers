@@ -1,6 +1,5 @@
 package com.dev.gdmainservice.services;
 
-import com.dev.gdmainservice.exceptions.ExceptionConst;
 import com.dev.gdmainservice.exceptions.GdNotFoundException;
 import com.dev.gdmainservice.exceptions.GdRuntimeException;
 import com.dev.gdmainservice.models.entity.GdPerson;
@@ -10,6 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static com.dev.gdmainservice.exceptions.ExceptionConst.*;
 
 /**
  * Сервис для работы с пользоваетлем
@@ -33,7 +34,7 @@ public class GdPersonService {
      */
     public void save(GdPerson person) {
         if (person == null) {
-            throw new GdRuntimeException(ExceptionConst.MESSAGE_RT, ExceptionConst.ERRORS_CODE_RT);
+            throw new GdRuntimeException(NULL_PARAM_MSG, NULL_PARAM_CODE);
         }
 
         personRepository.save(person);
@@ -46,7 +47,7 @@ public class GdPersonService {
      */
     public GdPerson findOne(Long id) {
         return personRepository.findById(id)
-                .orElseThrow(() -> new GdNotFoundException(ExceptionConst.MESSAGE_NF, ExceptionConst.ERRORS_CODE_NF));
+                .orElseThrow(() -> new GdNotFoundException(NOT_FOUND_MSG, NOT_FOUND_CODE));
     }
 
     /**

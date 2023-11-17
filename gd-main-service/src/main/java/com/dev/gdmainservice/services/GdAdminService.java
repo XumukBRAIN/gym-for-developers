@@ -1,12 +1,13 @@
 package com.dev.gdmainservice.services;
 
-import com.dev.gdmainservice.exceptions.ExceptionConst;
 import com.dev.gdmainservice.exceptions.GdNotFoundException;
 import com.dev.gdmainservice.exceptions.GdRuntimeException;
 import com.dev.gdmainservice.models.entity.GdAdmin;
 import com.dev.gdmainservice.repositories.GdAdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static com.dev.gdmainservice.exceptions.ExceptionConst.*;
 
 /**
  * Сервис для работы с администратором
@@ -29,7 +30,7 @@ public class GdAdminService {
      */
     public void save(GdAdmin admin) {
         if (admin == null) {
-            throw new GdRuntimeException(ExceptionConst.MESSAGE_RT, ExceptionConst.ERRORS_CODE_RT);
+            throw new GdRuntimeException(NULL_PARAM_MSG, NULL_PARAM_CODE);
         }
 
         adminRepository.save(admin);
@@ -42,6 +43,6 @@ public class GdAdminService {
      */
     public GdAdmin findByName(String name) {
         return adminRepository.findByName(name)
-                .orElseThrow(() -> new GdNotFoundException(ExceptionConst.MESSAGE_NF, ExceptionConst.ERRORS_CODE_NF));
+                .orElseThrow(() -> new GdNotFoundException(NOT_FOUND_MSG, NOT_FOUND_CODE));
     }
 }

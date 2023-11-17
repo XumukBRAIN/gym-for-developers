@@ -1,6 +1,5 @@
 package com.dev.gdmainservice.services;
 
-import com.dev.gdmainservice.exceptions.ExceptionConst;
 import com.dev.gdmainservice.exceptions.GdRuntimeException;
 import com.dev.gdmainservice.models.entity.GdNoteComment;
 import com.dev.gdmainservice.models.entity.GdNote;
@@ -9,6 +8,8 @@ import com.dev.gdmainservice.repositories.GdNoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.dev.gdmainservice.exceptions.ExceptionConst.*;
 
 /**
  * Сервис для работы с комментариями
@@ -35,12 +36,12 @@ public class GdNoteCommentService {
     @Transactional
     public GdNoteComment create(Integer noteId, GdNoteComment comment) {
         if (comment == null) {
-            throw new GdRuntimeException("В качестве комментария был передан null", ExceptionConst.ERRORS_CODE_RT);
+            throw new GdRuntimeException(NULL_PARAM_MSG, NULL_PARAM_CODE);
         }
 
         GdNote note = noteRepository.findNoteById(noteId);
         if (note == null) {
-            throw new GdRuntimeException("В поле noteId был передан null", ExceptionConst.ERRORS_CODE_RT);
+            throw new GdRuntimeException(NOT_FOUND_MSG, NOT_FOUND_CODE);
         }
 
         comment.setNote(note);

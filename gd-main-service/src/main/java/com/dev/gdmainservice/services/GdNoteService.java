@@ -1,7 +1,6 @@
 package com.dev.gdmainservice.services;
 
 import com.dev.gdmainservice.enums.NoteStatus;
-import com.dev.gdmainservice.exceptions.ExceptionConst;
 import com.dev.gdmainservice.exceptions.GdNotFoundException;
 import com.dev.gdmainservice.exceptions.GdRuntimeException;
 import com.dev.gdmainservice.models.entity.GdNote;
@@ -12,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+
+import static com.dev.gdmainservice.exceptions.ExceptionConst.*;
 
 /**
  * Сервис для работы с заметками
@@ -32,20 +32,12 @@ public class GdNoteService {
         this.noteRepository = noteRepository;
     }
 
-    Map<String, Consumer<Integer>> CHANGE_STATUS_MAP = new HashMap<>() {{
-        put(NoteStatus.ACCEPTED.getTitle(), id -> accept(id));
-        put(NoteStatus.REJECTED.getTitle(), id -> reject(id));
-        put(NoteStatus.DELETED.getTitle(), id -> delete(id));
-        put(NoteStatus.RECOVERED.getTitle(), id -> recover(id));
-    }};
-
-    private void recover(Integer id) {
-        //TODO
-    }
-
-    private void delete(Integer id) {
-        //TODO
-    }
+    private final Map<String, Consumer<Integer>> CHANGE_STATUS_MAP = Map.of(
+            NoteStatus.ACCEPTED.getTitle(), this::accept,
+            NoteStatus.REJECTED.getTitle(), this::reject,
+            NoteStatus.DELETED.getTitle(), this::delete,
+            NoteStatus.RECOVERED.getTitle(), this::recover
+    );
 
     /**
      * Метод для создания заметки
@@ -54,7 +46,7 @@ public class GdNoteService {
      */
     public void save(GdNote note) {
         if (note == null) {
-            throw new GdRuntimeException(ExceptionConst.MESSAGE_RT, ExceptionConst.ERRORS_CODE_RT);
+            throw new GdRuntimeException(NULL_PARAM_MSG, NULL_PARAM_CODE);
         }
 
         note.setStatus(NoteStatus.IN_REVIEW.getTitle());
@@ -68,7 +60,7 @@ public class GdNoteService {
      */
     public GdNote findOne(int id) {
         return noteRepository.findById(id)
-                .orElseThrow(() -> new GdNotFoundException(ExceptionConst.MESSAGE_NF, ExceptionConst.ERRORS_CODE_NF));
+                .orElseThrow(() -> new GdNotFoundException(NOT_FOUND_MSG, NOT_FOUND_CODE));
     }
 
     /**
@@ -94,7 +86,7 @@ public class GdNoteService {
     /**
      * Метод для смены статусы заметки
      *
-     * @param id Идентификатор заметки
+     * @param id     Идентификатор заметки
      * @param status Новый статус
      */
     public void changeStatus(Integer id, String status) {
@@ -125,6 +117,34 @@ public class GdNoteService {
             noteRepository.reject(id, NoteStatus.REJECTED.getTitle());
         } catch (Exception e) {
             log.error("Ошибка в ходе отклонения заметки с идентификатором {}: {}", id, e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Метод удаления заметки
+     *
+     * @param id Идентификатор заметки
+     */
+    private void delete(Integer id) {
+        try {
+            noteRepository.delete(id, NoteStatus.DELETED.getTitle());
+        } catch (Exception e) {
+            log.error("Ошибка в ходе удаления заметки с идентификатором {}: {}", id, e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Метод восстановления заметки
+     *
+     * @param id Идентификатор заметки
+     */
+    private void recover(Integer id) {
+        try {
+            noteRepository.recover(id, NoteStatus.RECOVERED.getTitle());
+        } catch (Exception e) {
+            log.error("Ошибка в ходе восстановления заметки с идентификатором {}: {}", id, e.getMessage());
             throw e;
         }
     }
