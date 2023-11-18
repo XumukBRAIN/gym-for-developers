@@ -17,7 +17,7 @@ message Book {
   string author = 3;
   double price = 4;
   int32 pages = 5;
-  google.protobuf.Timestamp creationDate = 6;
+  string creationDate = 6;
   string topic = 7;
 }
 
@@ -29,7 +29,7 @@ message getAllBooksByTopicRs {
   repeated Book books = 1;
 }
 
-service GdBookService {
+service BookService {
   rpc getAllBooks(getAllBooksRq) returns (getAllBooksRs);
   rpc getAllBooksByTopic(getAllBooksByTopicRq) returns (getAllBooksByTopicRs);
 }
