@@ -1,8 +1,31 @@
+//added for com.google.protobuf plugin
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.google.protobuf:protobuf-gradle-plugin:0.8.17"
+    }
+}
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.github.jk1:gradle-license-report:1.17"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.5'
     id 'io.spring.dependency-management' version '1.1.3'
-    id "com.google.protobuf" version "0.8.12"
+    id 'com.google.protobuf' version '0.8.17'
 }
 
 sourceSets {
@@ -14,17 +37,16 @@ sourceSets {
     }
 }
 
+//Proto buf task to generate
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.10.1'
+        artifact = "com.google.protobuf:protoc:3.17.2"
     }
-
     plugins {
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.25.0'
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.39.0'
         }
     }
-
     generateProtoTasks {
         all()*.plugins {
             grpc {}
@@ -47,6 +69,9 @@ ext {
     set('springCloudVersion', "2022.0.3")
 }
 
+apply plugin: "com.google.protobuf"
+apply plugin: "com.github.jk1.dependency-license-report"
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
@@ -59,9 +84,15 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.apache.commons:commons-collections4:4.4'
 
-    implementation 'io.grpc:grpc-netty-shaded:1.59.0'
-    implementation 'io.grpc:grpc-protobuf:1.59.0'
-    implementation 'io.grpc:grpc-stub:1.59.0'
+    // For Protoc
+    // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
+    implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.17.3'
+    // https://mvnrepository.com/artifact/io.grpc/grpc-all
+    implementation group: 'io.grpc', name: 'grpc-all', version: '1.39.0'
+    // https://mvnrepository.com/artifact/com.google.protobuf/protoc
+    implementation group: 'com.google.protobuf', name: 'protoc', version: '3.17.3', ext: 'pom'
+    // https://mvnrepository.com/artifact/net.devh/grpc-server-spring-boot-starter
+    implementation group: 'net.devh', name: 'grpc-server-spring-boot-starter', version: '2.12.0.RELEASE'
 
     implementation 'org.flywaydb:flyway-core:9.17.0'
 

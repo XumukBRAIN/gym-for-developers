@@ -5,26 +5,24 @@ import com.dev.gdstoreservice.repositories.GdBookRepository;
 import com.dev.grpc.gdstore.book.BookServiceGrpc;
 import com.dev.grpc.gdstore.book.GdBookService;
 import io.grpc.stub.StreamObserver;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
-@Transactional(
-        readOnly = true,
-        propagation = Propagation.REQUIRED
-)
 public class GdBookServiceGrpc extends BookServiceGrpc.BookServiceImplBase {
 
-    private final GdBookRepository repository;
+    private GdBookRepository repository;
+
+    @Autowired
+    public void setRepository(GdBookRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public void getAllBooks(GdBookService.getAllBooksRq request, StreamObserver<GdBookService.getAllBooksRs> responseObserver) {
