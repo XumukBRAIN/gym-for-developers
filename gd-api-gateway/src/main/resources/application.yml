@@ -16,6 +16,16 @@ spring:
           predicates:
             - Path=/main/test
             - Method=GET
+        - id: all
+          uri: lb://gd-main-service
+          predicates:
+            - Path=/book/all
+            - Method=GET
+        - id: byTopic
+          uri: lb://gd-main-service
+          predicates:
+            - Path=/book/byTopic/**
+            - Method=GET
 
 eureka:
   client:

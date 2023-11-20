@@ -1,7 +1,46 @@
+//added for com.google.protobuf plugin
+buildscript {
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath "gradle.plugin.com.google.protobuf:protobuf-gradle-plugin:0.8.17"
+	}
+}
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.5'
 	id 'io.spring.dependency-management' version '1.1.3'
+	id 'com.google.protobuf' version '0.8.17'
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs 'build/generated/source/proto/main/grpc'
+			srcDirs 'build/generated/source/proto/main/java'
+		}
+	}
+}
+
+//Proto buf task to generate
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc:3.17.2"
+	}
+	plugins {
+		grpc {
+			artifact = 'io.grpc:protoc-gen-grpc-java:1.39.0'
+		}
+	}
+	generateProtoTasks {
+		all()*.plugins {
+			grpc {}
+		}
+	}
 }
 
 group = 'com.dev'
@@ -25,6 +64,8 @@ ext {
 	set('springCloudVersion', "2022.0.4")
 }
 
+apply plugin: "com.google.protobuf"
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
@@ -36,6 +77,13 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// For Protoc
+	implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.17.3'
+	implementation group: 'io.grpc', name: 'grpc-all', version: '1.39.0'
+	implementation group: 'com.google.protobuf', name: 'protoc', version: '3.17.3', ext: 'pom'
+	implementation group: 'net.devh', name: 'grpc-server-spring-boot-starter', version: '2.12.0.RELEASE'
+	implementation group: 'net.devh', name: 'grpc-client-spring-boot-starter', version: '2.12.0.RELEASE'
+	implementation 'javax.annotation:javax.annotation-api:1.3.2'
 }
 
 dependencyManagement {

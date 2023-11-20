@@ -1,5 +1,7 @@
 package com.dev.gdstoreservice.services;
 
+import com.dev.gdstoreservice.converters.GdBookConverter;
+import com.dev.gdstoreservice.enums.Topic;
 import com.dev.gdstoreservice.exceptions.GdRuntimeException;
 import com.dev.gdstoreservice.repositories.GdBookRepository;
 import com.dev.grpc.gdstore.book.BookServiceGrpc;
@@ -8,9 +10,11 @@ import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -29,14 +33,7 @@ public class GdBookServiceGrpc extends BookServiceGrpc.BookServiceImplBase {
         try {
             log.info("Запрос принят!");
             List<GdBookService.Book> books = repository.findAll().stream()
-                    .map(book -> GdBookService.Book.newBuilder()
-                            .setTitle(book.getTitle())
-                            .setAuthor(book.getAuthor())
-                            .setTopic(book.getTopic())
-                            .setPrice(book.getPrice().doubleValue())
-                            .setPages(book.getPages())
-                            .setCreationDate(String.valueOf(book.getCreationDate()))
-                            .build())
+                    .map(GdBookConverter::toGrpcObject)
                     .toList();
 
             if (CollectionUtils.isEmpty(books)) {
@@ -65,17 +62,15 @@ public class GdBookServiceGrpc extends BookServiceGrpc.BookServiceImplBase {
             throw new GdRuntimeException("gdStoreService.services.grpc", "Не передан топик");
         }
 
+        if (!Topic.contains(topic)) {
+            throw new GdRuntimeException("gdStoreService.services.grpc", "Был передан несуществующий топик");
+        }
+
         try {
-            log.info("Запрос принят!");
+            MDC.put("atTime", String.valueOf(LocalDateTime.now()));
+            log.info("Запрос на получение всех книг с топиком {} принят", topic);
             List<GdBookService.Book> books = repository.getAllByTopic(topic).stream()
-                    .map(book -> GdBookService.Book.newBuilder()
-                            .setTitle(book.getTitle())
-                            .setAuthor(book.getAuthor())
-                            .setTopic(topic)
-                            .setPrice(book.getPrice().doubleValue())
-                            .setPages(book.getPages())
-                            .setCreationDate(String.valueOf(book.getCreationDate()))
-                            .build())
+                    .map(GdBookConverter::toGrpcObject)
                     .toList();
 
             if (CollectionUtils.isEmpty(books)) {
@@ -94,6 +89,9 @@ public class GdBookServiceGrpc extends BookServiceGrpc.BookServiceImplBase {
         } catch (Exception e) {
             log.error("Ошибка в работе метода getAllByTopic: {}", e.getMessage());
             throw new GdRuntimeException("gdStoreService.services.grpc", "Ошибка в работе метода getAllByTopic");
+        } finally {
+            MDC.clear();
         }
     }
+    //TODO проверить config (Может можно как-то по другому), разобраться с полем id
 }

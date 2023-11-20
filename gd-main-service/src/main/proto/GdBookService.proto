@@ -1,0 +1,37 @@
+syntax = "proto3";
+package com.dev.grpc.gdstore.book;
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+
+message getAllBooksRq {
+
+}
+
+message getAllBooksByTopicRq {
+  string topic = 1;
+}
+
+message Book {
+  string title = 2;
+  string author = 3;
+  double price = 4;
+  int32 pages = 5;
+  string creationDate = 6;
+  string topic = 7;
+}
+
+message getAllBooksRs {
+  repeated Book books = 1;
+}
+
+message getAllBooksByTopicRs {
+  repeated Book books = 1;
+}
+
+service BookService {
+  rpc getAllBooks(getAllBooksRq) returns (getAllBooksRs);
+  rpc getAllBooksByTopic(getAllBooksByTopicRq) returns (getAllBooksByTopicRs);
+}
+
+
+
