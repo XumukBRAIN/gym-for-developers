@@ -1,8 +1,9 @@
 package com.dev.gdmainservice.models.dto;
 
-import com.dev.gdmainservice.models.entity.GdPerson;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -19,5 +20,16 @@ public class GdPersonDto {
 
     private LocalDate birthDate;
 
-    private GdPerson.ExtraInfo extraInfo;
+    private GdPersonDto.ExtraInfoDto extraInfoDto;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder(toBuilder = true)
+    public static class ExtraInfoDto {
+        private String github;
+        private String instagram;
+        private String vk;
+        private String telegram;
+    }
 }

@@ -31,7 +31,7 @@ public class GdPersonController {
     }
 
     @GetMapping("/extraInfo/{id}")
-    public GdPerson.ExtraInfo getExtraInfo(@PathVariable("id") Long id) {
+    public GdPersonDto.ExtraInfoDto getExtraInfo(@PathVariable("id") Long id) {
         return GdPersonConverter.convertToExtraInfoDTO(personService.getExtraInfo(id));
     }
 
