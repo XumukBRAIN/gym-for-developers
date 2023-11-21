@@ -20,6 +20,10 @@ spring:
     locations: classpath:db.migration
     user: postgres
     password: Relhzijd24
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      enabled: true
 
 eureka:
   client:
@@ -27,5 +31,11 @@ eureka:
       default-zone: http://localhost:8761/eureka # microservices registration
     fetch-registry: true
     register-with-eureka: true
+
+s3:
+  url: http://127.0.0.1:9090
+  accessKey: VUrjTH56pB1b7kIfQX5u
+  secretKey: xcbcH62zsi9ouRd5aawvGCNK9zl43PKMnNvg7MpF
+  bucketName: gd-store
 
 
