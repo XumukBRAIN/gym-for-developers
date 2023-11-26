@@ -1,11 +1,13 @@
 package com.dev.gdstoreservice.controllers;
 
-import com.dev.gdstoreservice.configs.minio.MinioClientConfig;
 import com.dev.gdstoreservice.minio.MinioUtil;
-import io.minio.MinioClient;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
 
 @RestController
 @RequestMapping("/minio")
@@ -14,43 +16,24 @@ public class MinioController {
     MinioUtil minioUtil = new MinioUtil();
 
     @PostMapping("/uploadFile")
-    public void uploadFile(@RequestParam("file") MultipartFile file) {
-        MinioClient minioClient = MinioClientConfig.getMinioClient();
-        if (minioClient == null) {
-            return;
-        }
-
-        minioUtil.minioUpload(file, file.getOriginalFilename(), "gd-store");
+    public ResponseEntity<Integer> uploadFile(@RequestParam("file") MultipartFile file) {
+        minioUtil.uploadFile(file, "gd-store");
+        return ResponseEntity.ok(HttpStatus.OK.value());
     }
 
-    @RequestMapping("/getRedFile")
-    public String getRedFile(@RequestBody String fileName) {
-        MinioClient minioClient = MinioClientConfig.getMinioClient();
-        if (minioClient == null) {
-            return "Minio client is null";
-        }
-
-        return minioUtil.getPreviewFileUrl("gd-store", fileName);
+    @GetMapping("/getFile")
+    public ResponseEntity<String> getFile(@RequestParam String filename) {
+        return ResponseEntity.ok(minioUtil.getPreviewFileUrl("gd-store", filename));
     }
 
-    @RequestMapping("/downloadFile")
-    public String downloadFile(@RequestParam String fileName, HttpServletResponse response) {
-        MinioClient minioClient = MinioClientConfig.getMinioClient();
-        if (minioClient == null) {
-            return "Fail to connect to MinIO server";
-        }
-        MinioUtil.downloadFile("gd-store", fileName, response);
-        return "Ok";
+    @PostMapping("/downloadFile")
+    public InputStream downloadFile(@RequestParam String filename, HttpServletResponse response) {
+        return minioUtil.downloadFile("gd-store", filename, response);
     }
 
-//    @PostMapping("/deleteFile")
-//    public String deleteFile(String fileName) {
-//        MinioClient minioClient = MinioClientConfig.getMinioClient();
-//        if (minioClient == null) {
-//            return  "Fail to connect to MinIO server";
-//        }
-//
-//        boolean flag = minioUtil.deleteFile("gd-store",fileName);
-//        return flag ? "Delete successful": "Delete failed";
-//    }
+    @DeleteMapping("/deleteFile")
+    public ResponseEntity<Integer> deleteFile(@RequestParam("filename") String filename) {
+        minioUtil.deleteFile("gd-store", filename);
+        return ResponseEntity.ok(HttpStatus.OK.value());
+    }
 }

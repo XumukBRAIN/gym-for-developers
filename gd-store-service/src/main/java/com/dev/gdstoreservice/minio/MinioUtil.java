@@ -1,7 +1,9 @@
 package com.dev.gdstoreservice.minio;
 
 import com.dev.gdstoreservice.configs.minio.MinioClientConfig;
+import com.dev.gdstoreservice.exceptions.GdRuntimeException;
 import io.minio.*;
+import io.minio.http.Method;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -10,89 +12,55 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Component
 public class MinioUtil {
 
-    public void minioUpload(MultipartFile file, String fileName, String bucketName) {
-        try {
-            MinioClient minioClient = MinioClientConfig.getMinioClient();
-            if (fileName == null) {
-                fileName = file.getOriginalFilename();
-            } else {
-                fileName = fileName.replaceAll(" ", "_");
-            }
+    public void uploadFile(MultipartFile file, String bucketName) {
+        MinioClient minioClient = MinioClientConfig.getMinioClient();
+        if (minioClient == null) {
+            throw new GdRuntimeException("minioUtil.uploadFile.client.null", "MinioClient не доступен");
+        }
 
+        String filename = file.getName();
+        try {
             InputStream inputStream = file.getInputStream();
             PutObjectArgs objectArgs = PutObjectArgs.builder()
                     .bucket(bucketName)
-                    .object(fileName)
+                    .object(file.getOriginalFilename())
                     .stream(inputStream, file.getSize(), -1)
                     .contentType(file.getContentType())
                     .build();
 
             minioClient.putObject(objectArgs);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Ошибка при загрузке файла с названием {}: {}", filename, e.getMessage());
+            throw new GdRuntimeException("minioUtil.uploadFile.error", "Ошибка при загрузке файла");
         }
     }
 
-    public boolean bucketExists(String bucketName) {
-        boolean flag;
-        try {
-            flag = MinioClientConfig.bucketExists(bucketName);
-            if (flag) {
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+    public InputStream downloadFile(String bucketName, String filename, HttpServletResponse response) {
+        MinioClient minioClient = MinioClientConfig.getMinioClient();
+        if (minioClient == null) {
+            throw new GdRuntimeException("minioUtil.downloadFile.client.null", "MinioClient не доступен");
         }
-        return false;
-    }
 
-    public InputStream getFileInputStream(String fileName, String bucketName) {
-        try {
-            MinioClient minioClient = MinioClientConfig.getMinioClient();
-            return minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(fileName).build());
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+        if (StringUtils.isBlank(filename)) {
+            throw new GdRuntimeException("minioUtil.downloadFile.filename.null", "Отсутствует имя файла");
         }
-        return null;
-    }
 
-    public void createBucketName(String bucketName) {
         try {
-            if (StringUtils.isBlank(bucketName)) {
-                return;
-            }
-            MinioClient minioClient = MinioClientConfig.getMinioClient();
-            boolean isExist = MinioClientConfig.bucketExists(bucketName);
-            if (isExist) {
-                log.info("Bucket {} already exists.", bucketName);
-            } else {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-        }
-    }
+            InputStream file = minioClient.getObject(
+                    GetObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(filename)
+                            .build()
+            );
 
-
-    public static InputStream downloadFile(String bucketName, String originalName, HttpServletResponse response) {
-        try {
-            MinioClient minioClient = MinioClientConfig.getMinioClient();
-            InputStream file = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(originalName).build());
-            String filename = new String(originalName.getBytes("ISO8859-1"), StandardCharsets.UTF_8);
-            if (StringUtils.isNotBlank(originalName)) {
-                filename = originalName;
-            }
             response.setHeader("Content-Disposition", "attachment;filename=" + filename);
             ServletOutputStream servletOutputStream = response.getOutputStream();
+
             int len;
             byte[] buffer = new byte[1024];
             while ((len = file.read(buffer)) > 0) {
@@ -101,52 +69,61 @@ public class MinioUtil {
             servletOutputStream.flush();
             file.close();
             servletOutputStream.close();
+
+            log.info("Файл с названием {} успешно скачен", filename);
             return file;
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            log.error("Ошибка при скачивании файла с названием {}: {}", filename, e.getMessage());
+            throw new GdRuntimeException("minioUtil.downloadFile.error", "Ошибка при скачивании файла");
         }
     }
 
-    public void deleteBucketName(String bucketName) {
+    public String getPreviewFileUrl(String bucketName, String filename) {
+        MinioClient minioClient = MinioClientConfig.getMinioClient();
+        if (minioClient == null) {
+            throw new GdRuntimeException("minioUtil.getPreviewFileUrl.client.null", "MinioClient не доступен");
+        }
+
+        if (StringUtils.isBlank(filename)) {
+            throw new GdRuntimeException("minioUtil.downloadFile.filename.null", "Отсутствует имя файла");
+        }
+
         try {
-            if (StringUtils.isBlank(bucketName)) {
-                return;
-            }
-            MinioClient minioClient = MinioClientConfig.getMinioClient();
-            boolean isExist = MinioClientConfig.bucketExists(bucketName);
-            if (isExist) {
-                minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucketName).build());
-            }
+            return minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .bucket(bucketName)
+                            .object(filename)
+                            .method(Method.GET)
+                            .build()
+            );
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("Ошибка при получении URL файла с названием {}: {}", filename, e.getMessage());
+            throw new GdRuntimeException("minioUtil.getPreviewFileUrl.error", "Ошибка при получении URL файла");
         }
     }
 
-    public void deleteBucketFile(String bucketName) {
-        try {
-            if (StringUtils.isBlank(bucketName)) {
-                return;
-            }
-            MinioClient minioClient = MinioClientConfig.getMinioClient();
-            boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
-            if (isExist) {
-                minioClient.deleteBucketEncryption(DeleteBucketEncryptionArgs.builder().bucket(bucketName).build());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+    public void deleteFile(String bucketName, String filename) {
+        MinioClient minioClient = MinioClientConfig.getMinioClient();
+        if (minioClient == null) {
+            throw new GdRuntimeException("minioUtil.deleteFile.client.null", "MinioClient не доступен");
         }
-    }
 
-    public String getPreviewFileUrl(String bucketName, String fileName) {
+        if (StringUtils.isBlank(filename)) {
+            throw new GdRuntimeException("minioUtil.downloadFile.filename.null", "Отсутствует имя файла");
+        }
+
         try {
-            MinioClient minioClient = MinioClientConfig.getMinioClient();
-            return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder().bucket(bucketName).object(fileName).build());
+            minioClient.removeObject(
+                    RemoveObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(filename)
+                            .build()
+            );
+
+            log.info("Файл с названием {} успешно удален", filename);
         } catch (Exception e) {
-            e.printStackTrace();
-            return "";
+            log.error("Ошибка при удалении файла с названием {}: {}", filename, e.getMessage());
+            throw new GdRuntimeException("minioUtil.deleteFile.error", "Ошибка при удалении файла");
         }
     }
 }
