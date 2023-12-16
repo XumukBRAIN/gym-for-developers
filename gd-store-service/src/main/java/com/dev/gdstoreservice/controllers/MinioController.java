@@ -2,6 +2,7 @@ package com.dev.gdstoreservice.controllers;
 
 import com.dev.gdstoreservice.minio.MinioUtil;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +13,12 @@ import java.io.InputStream;
 @RestController
 @RequestMapping("/minio")
 public class MinioController {
+    private MinioUtil minioUtil;
 
-    MinioUtil minioUtil = new MinioUtil();
+    @Autowired
+    private void setMinioUtil(MinioUtil minioUtil) {
+        this.minioUtil = minioUtil;
+    }
 
     @PostMapping("/uploadFile")
     public ResponseEntity<Integer> uploadFile(@RequestParam("file") MultipartFile file) {

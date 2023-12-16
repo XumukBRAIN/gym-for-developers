@@ -24,7 +24,7 @@ public class GdBookServiceGrpc extends BookServiceGrpc.BookServiceImplBase {
     private GdBookRepository repository;
 
     @Autowired
-    public void setRepository(GdBookRepository repository) {
+    private void setRepository(GdBookRepository repository) {
         this.repository = repository;
     }
 

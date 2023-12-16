@@ -8,13 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Repository
-public interface GdPersonRepository extends JpaRepository<GdPerson, Integer> {
-
-    @Transactional(readOnly = true)
-    Optional<GdPerson> findById(long id);
+public interface GdPersonRepository extends JpaRepository<GdPerson, Long> {
 
     @Query("select p.extraInfo from GdPerson p where p.id = :id")
     @Transactional(readOnly = true)

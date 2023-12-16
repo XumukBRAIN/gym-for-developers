@@ -22,6 +22,8 @@ import static com.dev.gdmainservice.exceptions.ExceptionConst.*;
 public class GdPersonService {
     private final GdPersonRepository personRepository;
 
+    ObjectMapper objectMapper = new ObjectMapper();
+
     @Autowired
     public GdPersonService(GdPersonRepository personRepository) {
         this.personRepository = personRepository;
@@ -76,9 +78,7 @@ public class GdPersonService {
         }
 
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             String extraInfoJson = objectMapper.writeValueAsString(extraInfo);
-
             personRepository.saveExtraInfo(id, extraInfoJson);
             log.info("Дополнительная информация о пользователе создана/обновлена успешно");
         } catch (JsonProcessingException e) {
