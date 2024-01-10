@@ -14,7 +14,7 @@ public class GdBookConverter {
 
     public static GdBookDto toDto(GdBookService.Book book) {
         if (book == null) {
-            throw new GdRuntimeException("gdStoreService.converters.toDto", "Параметр равен null");
+            throw new GdRuntimeException("Параметр равен null");
         }
 
         return GdBookDto.builder()

@@ -31,7 +31,7 @@ public class AppStopListener implements ApplicationListener<ContextClosedEvent> 
             log.info("Количество ответов у которых были обновлены лайки: {}", countUpdatedAnswer);
         } catch (Exception e) {
             log.error("Ошибка при сохранении кэша ответов");
-            throw new GdRuntimeException("Ошибка при сохранении кэша ответов", "answer.cache.save.failed");
+            throw new GdRuntimeException("Ошибка при сохранении кэша ответов");
         }
     }
 }

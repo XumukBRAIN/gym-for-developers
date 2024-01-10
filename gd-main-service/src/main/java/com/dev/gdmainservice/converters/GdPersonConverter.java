@@ -17,7 +17,7 @@ public class GdPersonConverter {
      */
     public static GdPerson convertToEntity(GdPersonDto personDto) {
         if (personDto == null) {
-            throw new GdRuntimeException("gdMainService.converters.convertToEntity", "Ошибка при конвертации в сущность, DTO равняется null");
+            throw new GdRuntimeException("Ошибка при конвертации в сущность, DTO равняется null");
         }
 
         return GdPerson.builder()
@@ -35,7 +35,7 @@ public class GdPersonConverter {
      */
     public static GdPersonDto convertToPersonDTO(GdPerson person) {
         if (person == null) {
-            throw new GdRuntimeException("gdMainService.converters.convertToPersonDTO", "Ошибка при конвертации в DTO, сущность равянется null");
+            throw new GdRuntimeException("Ошибка при конвертации в DTO, сущность равняется null");
         }
 
         return GdPersonDto.builder()

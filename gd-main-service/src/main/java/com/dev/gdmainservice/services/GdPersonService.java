@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.dev.gdmainservice.exceptions.ExceptionConst.*;
-
 /**
  * Сервис для работы с пользоваетлем
  *
@@ -36,7 +34,7 @@ public class GdPersonService {
      */
     public void save(GdPerson person) {
         if (person == null) {
-            throw new GdRuntimeException(NULL_PARAM_MSG, NULL_PARAM_CODE);
+            throw new GdRuntimeException("В качестве параметра был передан null");
         }
 
         personRepository.save(person);
@@ -49,7 +47,7 @@ public class GdPersonService {
      */
     public GdPerson findOne(Long id) {
         return personRepository.findById(id)
-                .orElseThrow(() -> new GdNotFoundException(NOT_FOUND_MSG, NOT_FOUND_CODE));
+                .orElseThrow(() -> new GdNotFoundException("Пользователь с заданным идентификатором на найден"));
     }
 
     /**
@@ -60,7 +58,7 @@ public class GdPersonService {
      */
     public GdPerson.ExtraInfo getExtraInfo(Long id) {
         if (id == null) {
-            throw new GdRuntimeException("Не передан идентификатор пользователя", "personService.getExtraInfo.id.null");
+            throw new GdRuntimeException("Не передан идентификатор пользователя");
         }
 
         return personRepository.getExtraInfoById(id);
@@ -74,7 +72,7 @@ public class GdPersonService {
      */
     public void saveExtraInfo(Long id, GdPerson.ExtraInfo extraInfo) {
         if (extraInfo == null || id == null) {
-            throw new GdRuntimeException("Невалидные параметры при запросе", "personService.saveExtraInfo.params.null");
+            throw new GdRuntimeException("Невалидные параметры при запросе");
         }
 
         try {
@@ -83,10 +81,10 @@ public class GdPersonService {
             log.info("Дополнительная информация о пользователе создана/обновлена успешно");
         } catch (JsonProcessingException e) {
             log.error("Ошибка конвертации: {}", e.getMessage());
-            throw new GdRuntimeException("Ошибка конвертации", "personService.saveExtraInfo.writeValueAsString");
+            throw new GdRuntimeException("Ошибка конвертации");
         } catch (Exception e) {
             log.error("Ошибка в ходе выполнения создания/обновления дополнительной информации о пользователе: {}", e.getMessage());
-            throw new GdRuntimeException("Ошибка в ходе выполнения создания/обновления дополнительной информации о пользователе", "personService.saveExtraInfo.exception");
+            throw new GdRuntimeException("Ошибка в ходе выполнения создания/обновления дополнительной информации о пользователе");
         }
     }
 }

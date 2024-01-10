@@ -1,5 +1,6 @@
 package com.dev.gdmainservice.services;
 
+import com.dev.gdmainservice.exceptions.GdNotFoundException;
 import com.dev.gdmainservice.exceptions.GdRuntimeException;
 import com.dev.gdmainservice.models.entity.GdAnswer;
 import com.dev.gdmainservice.models.entity.GdQuestion;
@@ -10,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static com.dev.gdmainservice.exceptions.ExceptionConst.*;
 
 /**
  * Сервис для работы с ответами
@@ -37,12 +36,12 @@ public class GdAnswerService {
      */
     public void save(Long questionId, GdAnswer answer) {
         if (answer == null) {
-            throw new GdRuntimeException(NULL_PARAM_MSG, NULL_PARAM_CODE);
+            throw new GdRuntimeException("В качестве параметра был передан null");
         }
 
         GdQuestion question = questionRepository.findById(questionId);
         if (question == null) {
-            throw new GdRuntimeException(NOT_FOUND_MSG, NOT_FOUND_CODE);
+            throw new GdNotFoundException("Не найден вопрос с заданным идентификатором");
         }
 
         List<GdAnswer> answerList = question.getAnswer();

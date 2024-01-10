@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -41,7 +42,7 @@ public class GdQuestionController {
     @GetMapping("/generate-pdf/{count}")
     public void generateAndDownloadPdf(@PathVariable Integer count, HttpServletResponse response) throws IOException {
         File file = new File("random_questions.pdf");
-        gdQuestionService.generatePdf(count); // передайте свой список случайных записей
+        gdQuestionService.generatePdf(count);
 
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "attachment; filename=random_questions.pdf");
@@ -55,9 +56,9 @@ public class GdQuestionController {
                 os.write(buffer, 0, bytesRead);
             }
         } catch (Exception e) {
-            log.error("Ошибка в ходе создания PDF-файла с вопросами: {}", e.getMessage());
+            log.error("Ошибка в ходе создания PDF-файла с вопросами: {} в {}", e.getMessage(), LocalDateTime.now());
             response.sendError(0, "Ошибка в ходе создания PDF-файла с вопросами");
-            throw new RuntimeException();
+            throw e;
         }
     }
 }

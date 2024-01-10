@@ -2,13 +2,12 @@ package com.dev.gdmainservice.exceptions;
 
 import lombok.Getter;
 
+@Getter
 public class GdNotFoundException extends RuntimeException {
 
-    @Getter
-    private final String code;
+    private final String message;
 
-    public GdNotFoundException(String message,  String code) {
-        super(message);
-        this.code = code;
+    public GdNotFoundException(String message) {
+        this.message = message;
     }
 }

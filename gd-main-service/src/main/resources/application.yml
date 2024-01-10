@@ -39,3 +39,11 @@ eureka:
     service-url:
       default-zone: http://localhost:8761/eureka # microservices registration
 
+gym:
+  mail:
+    enabled: true
+    host: smtp.yandex.ru
+    username: Cross.Fit.SPB@yandex.ru
+    password: Crossfit584
+    port: 465
+    protocol: smtps

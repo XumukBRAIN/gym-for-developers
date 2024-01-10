@@ -1,6 +1,7 @@
 package com.dev.gdstoreservice.configs.minio;
 
 import io.minio.MinioClient;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +17,8 @@ public class MinioClientConfig {
 
     private final StorageConfig storageConfig;
 
+    @Getter
     private static MinioClient minioClient;
-
-    public static MinioClient getMinioClient() {
-        return minioClient;
-    }
 
     @PostConstruct
     public void init() {
@@ -30,8 +28,8 @@ public class MinioClientConfig {
                     .credentials(storageConfig.getAccessKey(), storageConfig.getSecretKey())
                     .build();
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("Initiating Minio Configuration Anomalous: {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

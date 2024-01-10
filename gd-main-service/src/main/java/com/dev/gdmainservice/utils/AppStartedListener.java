@@ -35,7 +35,7 @@ public class AppStartedListener implements ApplicationListener<ApplicationStarte
             log.info("Кэш ответов загружен успешно");
         } catch (Exception e) {
             log.error("Ошибка при загрузке кэша ответов: {}", e.getMessage());
-            throw new GdRuntimeException("Ошибка при загрузке кэша ответов", "answer.cache.load.failed");
+            throw new GdRuntimeException("Ошибка при загрузке кэша ответов");
         }
     }
 }

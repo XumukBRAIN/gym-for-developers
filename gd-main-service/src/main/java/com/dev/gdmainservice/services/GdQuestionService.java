@@ -4,8 +4,9 @@ import com.dev.gdmainservice.exceptions.GdRuntimeException;
 import com.dev.gdmainservice.models.entity.GdQuestion;
 import com.dev.gdmainservice.repositories.GdQuestionRepository;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
 import java.util.List;
-
-import static com.dev.gdmainservice.exceptions.ExceptionConst.NULL_PARAM_CODE;
-import static com.dev.gdmainservice.exceptions.ExceptionConst.NULL_PARAM_MSG;
 
 /**
  * Сервис для работы с вопросами
@@ -39,7 +37,7 @@ public class GdQuestionService {
      */
     public void save(GdQuestion question) {
         if (question == null) {
-            throw new GdRuntimeException(NULL_PARAM_MSG, NULL_PARAM_CODE);
+            throw new GdRuntimeException("В качестве параметра был передан null");
         }
 
         questionRepository.save(question);
@@ -59,14 +57,15 @@ public class GdQuestionService {
         try {
             PdfWriter.getInstance(document, new FileOutputStream("random_questions.pdf"));
             document.open();
-
-            int questionNumber = 1;
             List<String> randomQuestions = getRandomQuestions(count).stream()
                     .map(GdQuestion::getIssue)
                     .toList();
+            int questionNumber = 1;
+            BaseFont baseFont = BaseFont.createFont("ArialUnicodeMS.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Font font = new Font(baseFont, 14);
 
             for (String question : randomQuestions) {
-                Paragraph paragraph = new Paragraph(questionNumber + ". " + question, FontFactory.getFont(FontFactory.COURIER, 14));
+                Paragraph paragraph = new Paragraph(questionNumber + ". " + question, font);
                 document.add(paragraph);
                 questionNumber++;
             }

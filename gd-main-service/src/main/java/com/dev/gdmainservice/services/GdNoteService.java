@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static com.dev.gdmainservice.exceptions.ExceptionConst.*;
-
 /**
  * Сервис для работы с заметками
  *
@@ -46,7 +44,7 @@ public class GdNoteService {
      */
     public void save(GdNote note) {
         if (note == null) {
-            throw new GdRuntimeException(NULL_PARAM_MSG, NULL_PARAM_CODE);
+            throw new GdRuntimeException("В качестве параметра был передан null");
         }
 
         note.setStatus(NoteStatus.IN_REVIEW.getTitle());
@@ -58,9 +56,9 @@ public class GdNoteService {
      *
      * @param id Идентификатор заметки
      */
-    public GdNote findOne(int id) {
+    public GdNote findOne(Integer id) {
         return noteRepository.findById(id)
-                .orElseThrow(() -> new GdNotFoundException(NOT_FOUND_MSG, NOT_FOUND_CODE));
+                .orElseThrow(() -> new GdNotFoundException("Заметка с заданным идентификатором не найдена"));
     }
 
     /**
