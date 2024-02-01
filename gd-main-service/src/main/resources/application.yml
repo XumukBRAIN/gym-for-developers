@@ -14,12 +14,12 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/gym_dev
     username: postgres
-    password: Relhzijd24
+    password: xumuk
   flyway:
     url: jdbc:postgresql://localhost:5432/gym_dev
     locations: classpath:db.migration
     user: postgres
-    password: Relhzijd24
+    password: xumuk
   jpa:
     properties:
       hibernate:
@@ -47,3 +47,7 @@ gym:
     password: Crossfit584
     port: 465
     protocol: smtps
+
+
+cxf:
+  path: /note

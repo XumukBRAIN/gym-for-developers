@@ -5,6 +5,7 @@
   * Spring Cloud
   * Spring Data Jpa
   * gRPC
+  * SOAP
   * Файловое хранилище Minio
   * Миграция БД - flywaydb
   * PostgreSQL
