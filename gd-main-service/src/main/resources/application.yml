@@ -43,8 +43,8 @@ gym:
   mail:
     enabled: true
     host: smtp.yandex.ru
-    username: Cross.Fit.SPB@yandex.ru
-    password: Crossfit584
+    username: -----------------
+    password: --------
     port: 465
     protocol: smtps
 
