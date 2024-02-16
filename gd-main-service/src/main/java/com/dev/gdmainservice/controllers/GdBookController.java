@@ -3,6 +3,7 @@ package com.dev.gdmainservice.controllers;
 import com.dev.gdmainservice.models.dto.GdBookDto;
 import com.dev.gdmainservice.responses.OperationResponse;
 import com.dev.gdmainservice.services.GdBookServiceGrpc;
+import com.dev.gdmainservice.services.GdBookServiceHttp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,13 +17,14 @@ import java.util.List;
 @RequestMapping("/book")
 public class GdBookController {
 
-    private final GdBookServiceGrpc service;
+    private final GdBookServiceGrpc serviceGrpc;
+    private final GdBookServiceHttp serviceHttp;
 
     @GetMapping(value = "/all")
     public OperationResponse<List<GdBookDto>> all() {
         return new OperationResponse<>(
                 HttpStatus.OK.value(),
-                service.getAllBooks()
+                serviceGrpc.getAllBooks()
         );
     }
 
@@ -30,7 +32,15 @@ public class GdBookController {
     public OperationResponse<List<GdBookDto>> byTopic(@PathVariable("topic") String topic) {
         return new OperationResponse<>(
                 HttpStatus.OK.value(),
-                service.getAllBooksByTopic(topic)
+                serviceGrpc.getAllBooksByTopic(topic)
+        );
+    }
+
+    @PostMapping(value = "/save")
+    public OperationResponse<String> save(@RequestBody GdBookDto book) {
+        return new OperationResponse<>(
+                HttpStatus.OK.value(),
+                serviceHttp.save(book)
         );
     }
 }
