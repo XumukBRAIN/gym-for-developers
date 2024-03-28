@@ -7,7 +7,7 @@
   * gRPC
   * SOAP
   * Файловое хранилище Minio
-  * Миграция БД - flywaydb
+  * Миграция БД - flywaydb (Решено отказаться)
   * PostgreSQL
   * Lombok
   * Библиотека для создания pdf - com.itextpdf 

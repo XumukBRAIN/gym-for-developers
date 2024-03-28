@@ -14,12 +14,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/gym_store_dev
     username: postgres
-    password: Relhzijd24
-  flyway:
-    url: jdbc:postgresql://localhost:5432/gym_store_dev
-    locations: classpath:db.migration
-    user: postgres
-    password: Relhzijd24
+    password: xumuk
   servlet:
     multipart:
       max-file-size: 500MB

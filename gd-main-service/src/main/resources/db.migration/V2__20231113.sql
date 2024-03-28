@@ -1,1 +1,0 @@
-ALTER TABLE person ADD COLUMN extra_info jsonb

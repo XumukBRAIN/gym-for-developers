@@ -22,11 +22,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/gym_dev
     username: postgres
     password: xumuk
-  flyway:
-    url: jdbc:postgresql://localhost:5432/gym_dev
-    locations: classpath:db.migration
-    user: postgres
-    password: xumuk
   jpa:
     properties:
       hibernate:
