@@ -40,7 +40,7 @@ public class NoteSoapService {
         }
 
         return GdNote.newBuilder()
-                .advice(request.advice)
+                .advice(request.getAdvice())
                 .section(request.getSection())
                 .build();
     }
